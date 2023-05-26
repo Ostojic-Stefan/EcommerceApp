@@ -18,7 +18,7 @@ namespace api.Data
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, ex.Message);
+                    logger.LogError(ex, message: ex.Message);
                 }
             }
         }

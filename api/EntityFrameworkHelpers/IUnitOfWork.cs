@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace api.EntityFrameworkHelpers
 {
     public interface IUnitOfWork
     {
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
         IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : BaseEntity;
         IReadWriteRepository<TEntity> GetReadWriteRepository<TEntity>() where TEntity : BaseEntity;
     }

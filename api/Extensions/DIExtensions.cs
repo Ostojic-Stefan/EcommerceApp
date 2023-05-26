@@ -1,5 +1,6 @@
 using api.Data;
 using api.EntityFrameworkHelpers;
+using api.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Extensions
@@ -21,6 +22,9 @@ namespace api.Extensions
             {
                 return new UnitOfWork(provider.GetRequiredService<ApplicationDbContext>());
             });
+
+            collection.AddScoped<BasketService>();
+            collection.AddScoped<ProductService>();
 
             return collection;
         }

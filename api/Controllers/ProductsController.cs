@@ -1,42 +1,38 @@
-using api.EntityFrameworkHelpers;
-using api.Models;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
     public class ProductsController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ProductService _productService;
 
-        public ProductsController(IUnitOfWork unitOfWork)
+        public ProductsController(ProductService productService)
         {
-            _unitOfWork = unitOfWork;
+            _productService = productService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
-            var repo = _unitOfWork.GetReadOnlyRepository<Product>();
-            var allProducts = await repo.GetAllAsync().ConfigureAwait(false);
-            return Ok(allProducts);
+            return Ok(await _productService.GetAllProductsAsync().ConfigureAwait(false));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var repo = _unitOfWork.GetReadOnlyRepository<Product>();
-            var product = await repo.GetAsync(id).ConfigureAwait(false);
+            var product = await _productService.GetProductById(id).ConfigureAwait(false);
+            if (product is null)
+                return NotFound();
             return Ok(product);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllProducts(Product product)
+        public async Task<IActionResult> AddProduct(AddProductDto productDto)
         {
-            var repo = _unitOfWork.GetReadWriteRepository<Product>();
-            repo.Add(product);
-            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
+            var product = Mappings.MapFromProductDtoToProduct(productDto);
+            await _productService.AddProductAsync(product).ConfigureAwait(false);
             return Ok();
         }
-
     }
 }

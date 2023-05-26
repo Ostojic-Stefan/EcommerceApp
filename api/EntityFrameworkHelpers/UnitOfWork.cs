@@ -5,6 +5,7 @@ namespace api.EntityFrameworkHelpers
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DbContext _context;
+
         private readonly Dictionary<Type, object> _readOnlyRepos = new();
         private readonly Dictionary<Type, object> _readWriteRepos = new();
 
@@ -25,18 +26,20 @@ namespace api.EntityFrameworkHelpers
 
         public IReadWriteRepository<TEntity> GetReadWriteRepository<TEntity>() where TEntity : BaseEntity
         {
-            if (_readOnlyRepos.Keys.Contains(typeof(TEntity)))
-                return (ReadWriteRepository<TEntity>)_readOnlyRepos[typeof(TEntity)];
+            if (_readWriteRepos.Keys.Contains(typeof(TEntity)))
+                return (ReadWriteRepository<TEntity>)_readWriteRepos[typeof(TEntity)];
 
             var repo = new ReadWriteRepository<TEntity>(_context);
             _readWriteRepos.Add(typeof(TEntity), repo);
             return repo;
         }
 
-        public async Task SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            await _context.SaveChangesAsync()
+            var ret = await _context.SaveChangesAsync()
                 .ConfigureAwait(false);
+            _context.ChangeTracker.Clear();
+            return ret;
         }
     }
 }
