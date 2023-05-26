@@ -1,17 +1,30 @@
-﻿using api.Models;
-
-namespace api
+﻿namespace api
 {
     public record AddProductDto(
-        string Name, string Description, string Image, string Brand, int InStock, decimal Price, int CatergoryId
+        string Name,
+        string Description,
+        string Image,
+        string Brand, 
+        int InStock,
+        decimal Price,
+        int CatergoryId
     );
 
     public record AddBasketItemDto(
-        int Quantity, int ProductId
+        int Quantity,
+        int ProductId
     );
 
     public record ProductResponseDto(
-        string Name, string Description, string Image, string Brand, int InStock, decimal Price, int Quantity, DateTime CreatedAt, DateTime UpdatedAt
+        string Name,
+        string Description, 
+        string Image,
+        string Brand, 
+        int InStock, 
+        decimal Price,
+        int Quantity,
+        DateTime CreatedAt,
+        DateTime UpdatedAt
     );
 
     public record BasketResponseDto(
