@@ -13,6 +13,8 @@ namespace api.Extensions
             collection.AddEndpointsApiExplorer();
             collection.AddSwaggerGen();
 
+            collection.AddCors();
+
             collection.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlite(config.GetConnectionString("SqliteConnection"));
