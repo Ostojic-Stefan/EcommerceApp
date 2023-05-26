@@ -13,6 +13,16 @@ namespace api.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<IReadOnlyList<Product>> GetProductsFromCategoryName(string categoryName)
+        {
+            var productRepo = _unitOfWork.GetReadOnlyRepository<Product>();
+            return await productRepo
+                .Query()
+                .Include(x => x.Category)
+                .Where(x => x.Category.Name == categoryName)
+                .ToListAsync();
+        }
+
         public async Task AddProductAsync(Product product)
         {
             var repo = _unitOfWork.GetReadWriteRepository<Product>();

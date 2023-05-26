@@ -18,10 +18,16 @@ namespace api.Controllers
             return Ok(await _productService.GetAllProductsAsync().ConfigureAwait(false));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{categoryName}")]
+        public async Task<IActionResult> GetAllProducts(string categoryName)
+        {
+            return Ok(await _productService.GetProductsFromCategoryName(categoryName).ConfigureAwait(false));
+        }
+
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _productService.GetProductById(id).ConfigureAwait(false);
+            var product = await _productService.GetProductByIdAsync(id).ConfigureAwait(false);
             if (product is null)
                 return NotFound();
             return Ok(product);

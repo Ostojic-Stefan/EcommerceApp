@@ -36,7 +36,7 @@ namespace api.Controllers
             if (customerId is null)
                 customerId = CreateCustomerId();
             Basket basket = await _basketService.RetrieveBasketAsync(customerId);
-            Product? product = await _productService.GetProductById(basketItemDto.ProductId);
+            Product? product = await _productService.GetProductByIdAsync(basketItemDto.ProductId);
             if (product is null)
                 return NotFound();
             await _basketService.UpdateBasket(basket, product, basketItemDto.Quantity);
