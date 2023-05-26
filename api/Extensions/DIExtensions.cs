@@ -25,6 +25,7 @@ namespace api.Extensions
 
             collection.AddScoped<BasketService>();
             collection.AddScoped<ProductService>();
+            collection.AddScoped<CategoriesService>();
 
             return collection;
         }
