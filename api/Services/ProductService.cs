@@ -39,15 +39,5 @@ namespace api.Services
                 .FirstOrDefaultAsync(x => x.Id == id)
                 .ConfigureAwait(false);
         }
-
-        public async Task<Product?> GetProductById(int id)
-        {
-            var productRepo = _unitOfWork.GetReadOnlyRepository<Product>();
-            return await productRepo
-                .Query()
-                .Include(x => x.Category)
-                .FirstOrDefaultAsync()
-                .ConfigureAwait(false);
-        }
     }
 }
