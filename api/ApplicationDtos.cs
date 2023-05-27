@@ -3,11 +3,11 @@
     public record AddProductDto(
         string Name,
         string Description,
-        string Image,
+        IFormFile ProductImage,
         string Brand, 
         int InStock,
         decimal Price,
-        int CatergoryId
+        int CategoryId
     );
 
     public record AddBasketItemDto(
@@ -15,10 +15,10 @@
         int ProductId
     );
 
-    public record ProductResponseDto(
+    public record BasketItemResponseDto(
         string Name,
         string Description, 
-        string Image,
+        string ImageUrl,
         string Brand, 
         int InStock, 
         decimal Price,
@@ -28,6 +28,23 @@
     );
 
     public record BasketResponseDto(
-        IEnumerable<ProductResponseDto> Products
+        IEnumerable<BasketItemResponseDto> Products
+    );
+
+    public record CategoryResponseDto(
+        string Name,
+        string IconUrl
+    );
+
+    public record ProductResponseDto(
+        string Name,
+        string Description,
+        string ImageUrl,
+        string Brand,
+        int InStock,
+        decimal Price,
+        CategoryResponseDto Category,
+        DateTime CreatedAt,
+        DateTime UpdatedAt
     );
 }

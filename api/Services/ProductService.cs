@@ -23,11 +23,12 @@ namespace api.Services
                 .ToListAsync();
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task<Product> AddProductAsync(Product product)
         {
-            var repo = _unitOfWork.GetReadWriteRepository<Product>();
-            repo.Add(product);
+            var productRepo = _unitOfWork.GetReadWriteRepository<Product>();
+            productRepo.Add(product);
             await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
+            return product;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
@@ -36,6 +37,7 @@ namespace api.Services
             return await productRepo
                 .Query()
                 .Include(x => x.Category)
+                .Include(x => x.ProductImage)
                 .ToListAsync()
                 .ConfigureAwait(false);
         }

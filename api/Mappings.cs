@@ -4,15 +4,15 @@ namespace api
 {
     public static class Mappings
     {
-        public static IEnumerable<ProductResponseDto> MapFromBasketToProductResponseDto(Basket basket)
+        public static IEnumerable<BasketItemResponseDto> MapFromBasketToProductResponseDto(Basket basket)
         {
             var res = basket.BasketItems.Select(x =>
             {
-                return new ProductResponseDto
+                return new BasketItemResponseDto
                 (
                     x.Product.Name,
                     x.Product.Description,
-                    x.Product.Image,
+                    x.Product.ProductImage.Url,
                     x.Product.Brand,
                     x.Product.InStock,
                     x.Product.Price,
@@ -29,14 +29,32 @@ namespace api
             return new Product
             {
                 Brand = addProductDto.Brand,
-                CategoryId = addProductDto.CatergoryId,
+                CategoryId = addProductDto.CategoryId,
                 CreatedAt = DateTime.UtcNow,
                 Description = addProductDto.Description,
-                Image = addProductDto.Image,
                 InStock = addProductDto.InStock,
                 Name = addProductDto.Name,
                 Price = addProductDto.Price,
             };
+        }
+
+        public static ProductResponseDto MapFromProductToProductResponseDto(Product product)
+        {
+            return new ProductResponseDto
+            (
+                product.Name,
+                product.Description,
+                product.ProductImage?.Url,
+                product.Brand,
+                product.InStock,
+                product.Price,
+                new CategoryResponseDto(
+                    product.Category.Name,
+                    product.Category.Icon
+                ),
+                product.CreatedAt,
+                product.UpdatedAt
+            );
         }
     }
 }
