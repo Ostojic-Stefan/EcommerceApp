@@ -1,23 +1,21 @@
-import { useEffect, useState } from "react";
-import { apiHandler } from "./apiHandler";
-import { ProductResponseDto } from "./dtos/ProductDtos";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./store/configureStore";
+import { getProductsAsync } from "./store/productSlice";
+import ProductList from "./components/ProductList";
 
 function App() {
-  const [products, setProducts] = useState<ProductResponseDto[]>();
+  const { products } = useAppSelector((state) => state.product);
+  const dispatch = useAppDispatch();
+
+  console.log(products);
+
   useEffect(() => {
-    apiHandler.products.getAllProducts().then((data) => {
-      setProducts(data);
-    });
+    dispatch(getProductsAsync());
   }, []);
 
   return (
     <div>
-      {products?.map((product) => (
-        <div key={product.id}>
-          <h1>{product.name}</h1>
-          <p>{product.description}</p>
-        </div>
-      ))}
+      <ProductList />
     </div>
   );
 }
