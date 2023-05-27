@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./store/configureStore";
 import { getProductsAsync } from "./store/productSlice";
 import ProductList from "./components/ProductList";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const { products } = useAppSelector((state) => state.product);

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { ProductResponseDto } from './dtos/ProductDtos';
+import { AddProductDto, ProductResponseDto } from './dtos/ProductDtos';
 
 axios.defaults.baseURL = "https://localhost:5001/api";
 axios.defaults.withCredentials = true;
@@ -10,7 +10,9 @@ const products = {
     getAllProducts: () => axios.get<ProductResponseDto[]>("products")
         .then(responseBody<ProductResponseDto[]>),
     getProduct: (productId: number) => axios.get<ProductResponseDto>(`products/${productId}`)
-        .then(responseBody<ProductResponseDto>)
+        .then(responseBody<ProductResponseDto>),
+    addProduct: (data: AddProductDto) => axios.post("products", data)
+        .then(responseBody)
 }
 
 export const apiHandler = {

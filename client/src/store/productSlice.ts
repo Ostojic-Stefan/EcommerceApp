@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ProductResponseDto } from "../dtos/ProductDtos";
+import { AddProductDto, ProductResponseDto } from "../dtos/ProductDtos";
 import { apiHandler } from "../apiHandler";
 
 enum Status {
@@ -27,6 +27,17 @@ export const getProductsAsync = createAsyncThunk<ProductResponseDto[]>(
             return thunkAPI.rejectWithValue({ error: error.data });
         }
     }
+);
+
+export const addProductAsync = createAsyncThunk(
+    'products/addProductAsync', async (data: AddProductDto, thunkAPI) => {
+        try {
+            console.log(data);
+            return await apiHandler.products.addProduct(data);
+        } catch (error: any) {
+            thunkAPI.rejectWithValue({ error: error.data });            
+        }
+    }
 )
 
 export const productSlice = createSlice({
@@ -46,6 +57,12 @@ export const productSlice = createSlice({
         builder.addCase(getProductsAsync.rejected, (state, action) => {
             state.status = Status.Rejected;
             console.error(action);
+        });
+        builder.addCase(addProductAsync.fulfilled, (state, action) => {
+            console.log(action);
+        });
+        builder.addCase(addProductAsync.rejected, (state, action) => {
+            console.log(action);
         });
     }
 });
