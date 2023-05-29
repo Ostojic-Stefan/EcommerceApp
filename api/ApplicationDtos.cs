@@ -1,4 +1,6 @@
-﻿namespace api
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace api
 {
     public record AddProductDto(
         string Name,
@@ -46,5 +48,21 @@
         CategoryResponseDto Category,
         DateTime CreatedAt,
         DateTime UpdatedAt
+    );
+
+    public record UserRegisterDto(
+        [Required]
+        string Username,
+        [Required][DataType(DataType.EmailAddress)]
+        string Email,
+        [Required]
+        string Password
+    );
+
+    public record UserLoginDto(
+    [Required][DataType(DataType.EmailAddress)]
+    string Email,
+    [Required]
+    string Password
     );
 }

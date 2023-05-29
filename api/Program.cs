@@ -7,17 +7,12 @@ builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
-//builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
-//{
-//    var env = hostingContext.HostingEnvironment;
-//    config.SetBasePath(env.ContentRootPath);
-//});
-
 builder.WebHost.UseWebRoot("wwwroot");
 
 var app = builder.Build();
 
 await DbHelpers.MigrateDatabase(app.Services);
+await DbHelpers.SeedUsers(app.Services);
 
 if (app.Environment.IsDevelopment())
 {
@@ -36,6 +31,8 @@ app.UseCors(
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

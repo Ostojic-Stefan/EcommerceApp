@@ -1,8 +1,8 @@
-using api.EntityFrameworkHelpers;
+using api.Identity;
 using api.Models;
 using api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -42,6 +42,7 @@ namespace api.Controllers
             return Ok(Mappings.MapFromProductToProductResponseDto(product));
         }
 
+        [Authorize(Policy = IdentityData.AdminUserClaimName)]
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromForm] AddProductDto productDto)
         {
@@ -52,7 +53,7 @@ namespace api.Controllers
                 productDto.ProductImage.FileName,
                 productDto.ProductImage.OpenReadStream()
             ).ConfigureAwait(false);
-            return Ok();
+            return Ok(prod);
         }
     }
 }
