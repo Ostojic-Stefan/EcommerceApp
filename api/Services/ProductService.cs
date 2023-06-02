@@ -48,6 +48,7 @@ namespace api.Services
             return await productRepo
                 .Query()
                 .Include(x => x.Category)
+                .Include(x => x.ProductImage)
                 .FirstOrDefaultAsync(x => x.Id == id)
                 .ConfigureAwait(false);
         }
