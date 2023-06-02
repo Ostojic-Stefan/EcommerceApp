@@ -1,12 +1,12 @@
-import { About } from "./views/pages/About";
-import { Home } from "./views/pages/Home";
 import { DefaultNotFound } from "./Router/DefaultNotFound";
 import { RouterBuilder } from "./Router/RouterBuilder";
+import Home from "./views/pages/Home";
+import SingleProduct from "./views/pages/SingleProduct";
 
 const router = new RouterBuilder()
     .setHtmlId('page_container')
     .addRoute('/', Home)
-    .addRoute('/about', About)
+    .addRoute('/product/:id', SingleProduct)
     .addNotFoundPage(DefaultNotFound)
     .build();
 

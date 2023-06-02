@@ -22,6 +22,7 @@ export class Router {
         if (!this.htmlContent)
             throw new Error("Html Content is not set up correctly");
         this.htmlContent.innerHTML = await page.render();
+        await page.afterRender();
     }
 
     private parseUrl(): string {
