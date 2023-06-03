@@ -18,9 +18,9 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] ProductPaginationParams productPaginationParams)
         {
-            var products = await _productService.GetAllProductsAsync().ConfigureAwait(false);
+            var products = await _productService.GetAllProductsAsync(productPaginationParams).ConfigureAwait(false);
             var response = products.Select(Mappings.MapFromProductToProductResponseDto);
             return Ok(response);
         }

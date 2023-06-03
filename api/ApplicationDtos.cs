@@ -39,6 +39,7 @@ namespace api
     );
 
     public record ProductResponseDto(
+        int Id,
         string Name,
         string Description,
         string ImageUrl,
@@ -64,5 +65,14 @@ namespace api
     string Email,
     [Required]
     string Password
+    );
+
+    public record ProductPaginationParams(
+        string? SearchTerm,
+        string? Brand,
+        string? Category,
+        int? PageNumber,
+        int? PageSize,
+        string? SortTerm
     );
 }

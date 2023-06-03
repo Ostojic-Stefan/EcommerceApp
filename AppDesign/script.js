@@ -93,3 +93,7 @@ let productsHtml = products.map((product) => {
 productsHtml = productsHtml.join("");
 
 mainPannel.insertAdjacentHTML("afterbegin", productsHtml);
+
+window.addEventListener("hashchange", (e) => {
+  console.log(location.hash);
+});

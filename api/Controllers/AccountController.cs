@@ -1,5 +1,6 @@
 ﻿using api.Models;
 using api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -34,6 +35,8 @@ namespace api.Controllers
             };
             var result = await _userManager.CreateAsync(user, userRegisterDto.Password);
 
+            await _userManager.AddClaimAsync(user, new Claim("Basic", "true"));
+
             if (!result.Succeeded)
             {
                 foreach (var err in result.Errors)
@@ -52,7 +55,7 @@ namespace api.Controllers
             var user = await _userManager.FindByEmailAsync(userLoginDto.Email);
 
             if (user is null)
-                return BadRequest("User does not exist");
+                return NotFound("User does not exist");
 
             var result = await _userManager.CheckPasswordAsync(user, userLoginDto.Password);
 
@@ -67,6 +70,25 @@ namespace api.Controllers
             });
 
             return Ok(new { Token = token });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("getClaims")]
+        public async Task<IActionResult> GetCurrentUserClaims()
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (userEmail is null)
+                return Unauthorized();
+
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            if (user is null)
+                return BadRequest("User does not exist");
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+
+            return Ok(userClaims);
         }
     }
 }
