@@ -7,18 +7,19 @@
 
 a.nostyle {
     height: fit-content;
+    cursor: pointer;
 }
 
 a.nostyle:link {
     text-decoration: inherit;
     color: inherit;
-    cursor: auto;
+    cursor: pointer;
 }
 
 a.nostyle:visited {
     text-decoration: inherit;
     color: inherit;
-    cursor: auto;
+    cursor: pointer;
 }
 
 body {
@@ -402,3 +403,92 @@ main .main-heading h1 {
 .single-product-container .specifications table td:nth-child(1) {
     background-color: #39393973;
 }
+
+
+/* Account */
+
+.login-container {
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+
+.login-container .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    width: 400px;
+
+    padding: 50px;
+    border-radius: 10px;
+    background-color: #39393973;
+    border: 2px solid #8a8a8a66;
+}
+
+.login-container .wrapper a {
+    color: #00a957;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.login-container .wrapper a:hover {
+    color: #00ff84;
+}
+
+
+.login-container .wrapper label {
+    font-size: 14px;
+}
+
+.login-container .wrapper input {
+    font-size: 26px;
+    border: 2px solid #8a8a8a66;
+    border-radius: 5px;
+    background-color: #62626266;
+
+    transition: border 0.3s;
+}
+
+.login-container .wrapper input:hover {
+    border: 2px solid #00ff84;
+}
+
+.login-container .wrapper button {
+    font-size: 26px;
+    border: 2px solid #8a8a8a66;
+    background-color: #62626266;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+
+    transition: border 0.3s;
+}
+
+.login-container .wrapper button:hover {
+    border: 2px solid #00ff84;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.login-container form input {
+    font-size: 26px;
+}
+
+
+.login-container form .form-control {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
