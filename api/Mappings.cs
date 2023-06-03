@@ -42,6 +42,7 @@ namespace api
         {
             return new ProductResponseDto
             (
+                product.Id,
                 product.Name,
                 product.Description,
                 product.ProductImage?.Url,
