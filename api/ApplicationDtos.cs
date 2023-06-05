@@ -5,6 +5,7 @@ namespace api
     public record AddProductDto(
         string Name,
         string Description,
+        string Specifications,
         IFormFile ProductImage,
         string Brand, 
         int InStock,
@@ -42,6 +43,7 @@ namespace api
         int Id,
         string Name,
         string Description,
+        string Specifications,
         string ImageUrl,
         string Brand,
         int InStock,

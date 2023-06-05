@@ -60,7 +60,13 @@ namespace api.Services
             var basketRepo = _unitOfWork.GetReadWriteRepository<Basket>();
             var basket = await basketRepo.Query()
                 .Include(x => x.BasketItems)
-                .ThenInclude(x => x.Product)
+                    .ThenInclude(x => x.Product)
+                .Include(x => x.BasketItems)
+                    .ThenInclude(x => x.Product)
+                        .ThenInclude(x => x.ProductImage)
+                .Include(x => x.BasketItems)
+                    .ThenInclude(x => x.Product)
+                        .ThenInclude(x => x.Category)
                 .Where(x => x.CustomerId == customerId)
                 .FirstOrDefaultAsync();
 

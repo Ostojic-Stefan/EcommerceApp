@@ -12,6 +12,8 @@ namespace api.Models
         public int InStock { get; set; }
         public decimal Price { get; set; }
 
+        public required string Specifications { get; set; }
+
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 

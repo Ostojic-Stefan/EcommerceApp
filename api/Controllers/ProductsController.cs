@@ -48,7 +48,7 @@ namespace api.Controllers
         {
             var product = Mappings.MapFromProductDtoToProduct(productDto);
             Product prod = await _productService.AddProductAsync(product);
-            ProductImage productImage = await _productImageService.AddProductImageAsync(
+            await _productImageService.AddProductImageAsync(
                 product,
                 productDto.ProductImage.FileName,
                 productDto.ProductImage.OpenReadStream()

@@ -19,14 +19,14 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BasketResponseDto>> GetBasket()
+        public async Task<IActionResult> GetBasket()
         {
             string? customerId = GetCustomerId();
             if (customerId is null)
                 return NotFound();
-            Basket basket = await _basketService.GetBasketFromCustomerId(customerId);
-            var products = Mappings.MapFromBasketToProductResponseDto(basket);
-            return Ok(new BasketResponseDto(products));
+            Basket basket = await _basketService.RetrieveBasketAsync(customerId);
+            //var products = Mappings.MapFromBasketToProductResponseDto(basket);
+            return Ok(Mappings.MapFromBasketToProductResponseDto(basket));
         }
 
         [HttpPost] 
@@ -40,6 +40,7 @@ namespace api.Controllers
             if (product is null)
                 return NotFound();
             await _basketService.UpdateBasket(basket, product, basketItemDto.Quantity);
+            basket = await _basketService.RetrieveBasketAsync(customerId);
             return CreatedAtAction(nameof(GetBasket), Mappings.MapFromBasketToProductResponseDto(basket));
         }
 
@@ -54,6 +55,8 @@ namespace api.Controllers
             Response.Cookies.Append("CustomerId", customerId, new CookieOptions
             {
                 Expires = DateTime.Now.AddDays(7),
+                SameSite = SameSiteMode.None,
+                Secure = true,
                 IsEssential = true
             });
             return customerId;
