@@ -4,21 +4,32 @@ import Home from "./views/pages/Home";
 import Login from "./views/pages/Login";
 import Register from "./views/pages/Register";
 import SingleProduct from "./views/pages/SingleProduct";
+import { store } from "./store";
+import Cart from "./views/pages/Cart";
+import { getBasket } from "./features/basket/basketSlice";
+
+store.dispatch(getBasket());
+
 
 const router = new RouterBuilder()
     .setHtmlId('page_container')
     .addRoute('/', Home)
     .addRoute('/product/:id', SingleProduct)
+    .addRoute('/cart', Cart)
     .addRoute('/login', Login)
     .addRoute('/register', Register)
     .addNotFoundPage(DefaultNotFound)
     .build();
 
-window.addEventListener('load', async () => {
-    await router.process();
+store.subscribe(() => {
+    router.process();
 });
 
-window.addEventListener('hashchange', async () => {
-    await router.process();
-});
+
+['load', 'hashchange'].forEach(ev => {
+    window.addEventListener(ev, async () => {
+        await router.process();
+    })
+}); 
+
 

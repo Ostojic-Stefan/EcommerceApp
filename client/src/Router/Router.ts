@@ -14,7 +14,6 @@ export class Router {
     public async process() {
         const parsedURL = this.parseUrl();
         const page: IPage = this.routes.get(parsedURL) ? this.routes.get(parsedURL)! : this.defaultNotFound!;
-        console.log(parsedURL);
         await this.render(page);
     }
 

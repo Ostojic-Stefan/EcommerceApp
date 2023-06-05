@@ -1,10 +1,22 @@
 import { ApiHandler } from "../../ApiHandler";
 
+function convertSpecificationsToHtml(object: any) {
+    return Object.entries(JSON.parse(object))
+        .reduce((acc, [key, val]) => {
+            return acc.concat( `
+                <tr>
+                    <td>${key}:</td>
+                    <td>${val}</td>
+                </tr>
+            `);
+    }, '');
+}
+
 class SingleProduct implements IPage {
     public async render(): Promise<string> {
         const productId = Number.parseInt(location.hash.split('/')[2]);
         const product = await ApiHandler.products.getProduct(productId);
-        console.log(product);
+
         return `
         <div class="single-product-container">
         <div class="single-product container">
@@ -45,38 +57,7 @@ class SingleProduct implements IPage {
             <h2>Specifications</h2>
             <table>
                 <tbody>
-                    <tr>
-                        <td>Podnožje:</td>
-                        <td>AMD® AM5</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
-                    <tr>
-                        <td>Tip procesora:</td>
-                        <td>AMD® Ryzen 7</td>
-                    </tr>
+                    ${convertSpecificationsToHtml(product.specifications)}
                 </tbody>
             </table>
         </div>

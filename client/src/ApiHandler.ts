@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "../node_modules/axios/index";
 import { LoginRequest, LoginResponse, RegisterRequest } from "./models/Account";
+import { AddToBasket, Basket } from "./models/Basket";
 import { Product } from "./models/Product";
 
 axios.defaults.baseURL = "https://localhost:5001/api/";
@@ -12,6 +13,11 @@ const products = {
     getProduct: (id: number) => axios.get<Product>(`Products/${id}`).then(responseBody<Product>),
 }
 
+const basket = {
+    addToBasket: (data: AddToBasket) => axios.post<Basket[]>("Basket", data).then(responseBody<Basket[]>),
+    getCart: () => axios.get<Basket[]>("Basket").then(responseBody<Basket[]>)
+}
+
 const account = {
     login: (loginData: LoginRequest) => axios.post<LoginResponse>("Account/login", loginData).then(responseBody<LoginResponse>),
     register: (loginData: RegisterRequest) => axios.post("Account/register", loginData).then(responseBody),
@@ -19,5 +25,6 @@ const account = {
 
 export const ApiHandler = {
     products,
-    account
+    basket,
+    account,
 }
