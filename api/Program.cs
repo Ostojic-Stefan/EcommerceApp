@@ -12,7 +12,7 @@ builder.WebHost.UseWebRoot("wwwroot");
 var app = builder.Build();
 
 await DbHelpers.MigrateDatabase(app.Services);
-await DbHelpers.SeedUsers(app.Services);
+await DbHelpers.Seed(app.Services);
 
 if (app.Environment.IsDevelopment())
 {
