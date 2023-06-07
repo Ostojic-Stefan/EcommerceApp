@@ -1,8 +1,10 @@
+using api.EntityFrameworkHelpers;
 using api.Identity;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace api.Data
 {
@@ -27,37 +29,65 @@ namespace api.Data
             }
         }
 
-        public static async Task SeedUsers(IServiceProvider serviceProvider)
+        public static async Task Seed(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var userManager = services.GetRequiredService<UserManager<User>>();
-                var logger = services.GetRequiredService<ILogger<Program>>();
+                await SeedUsers(services);
+                await SeedProducts(services);
+            }
+        }
 
-                try
+        private static async Task SeedProducts(IServiceProvider services)
+        {
+            var dbContext = services.GetRequiredService<ApplicationDbContext>();
+
+            if (dbContext.Products.Any()) 
+            {
+                return;
+            }
+
+            var processorsJSON = await File.ReadAllTextAsync("./Data/Seed/processors.json");
+            var processors = JsonSerializer.Deserialize<List<Product>>(processorsJSON);
+
+            var HDDJSON = await File.ReadAllTextAsync("./Data/Seed/hard_drives.json");
+            var HDDs = JsonSerializer.Deserialize<List<Product>>(HDDJSON);
+
+            var memoryJSON = await File.ReadAllTextAsync("./Data/Seed/memory.json");
+            var memory = JsonSerializer.Deserialize<List<Product>>(memoryJSON);
+
+            dbContext.Products.AddRange(processors.Concat(HDDs).Concat(memory));
+            await dbContext.SaveChangesAsync();
+        }
+
+        private static async Task SeedUsers(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+
+            try
+            {
+                if (await userManager.FindByNameAsync("Admin") is not null)
+                    return;
+
+                var user = new User
                 {
-                    if (await userManager.FindByNameAsync("Admin") is not null)
-                        return;
+                    UserName = "Admin",
+                    Email = "admin@admin.com"
+                };
+                var result = await userManager.CreateAsync(user, "Pa$$w0rd");
 
-                    var user = new User
-                    {
-                        UserName = "Admin",
-                        Email = "admin@admin.com"
-                    };
-                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
-
-                    if (!result.Succeeded)
-                    {
-                        logger.LogError("Failed to create an admin user");
-                    }
-
-                    await userManager.AddClaimAsync(user, new Claim(IdentityData.AdminUserClaimName, "true"));
-                }
-                catch (Exception ex)
+                if (!result.Succeeded)
                 {
-                    logger.LogError(ex, message: ex.Message);
+                    logger.LogError("Failed to create an admin user");
                 }
+
+                await userManager.AddClaimAsync(user, new Claim(IdentityData.AdminUserClaimName, "true"));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, message: ex.Message);
             }
         }
     }
