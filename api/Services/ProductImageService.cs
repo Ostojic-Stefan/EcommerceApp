@@ -23,7 +23,6 @@ namespace api.Services
             {
                 ProductId = product.Id,
                 ImageName = fileName,
-                Path = filePath,
                 Url = Utils.ConvertAbsoluteImageFilePathToUrl(filePath)
             };
             productImageRepo.Add(productImage);
