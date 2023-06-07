@@ -1,4 +1,5 @@
 using api.EntityFrameworkHelpers;
+using System.Text.Json.Serialization;
 
 namespace api.Models
 {
@@ -17,6 +18,7 @@ namespace api.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
+        [JsonPropertyName("productImage")]
         public ProductImage? ProductImage { get; set; }
     }
 }

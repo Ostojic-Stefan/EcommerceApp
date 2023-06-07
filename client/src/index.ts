@@ -7,8 +7,10 @@ import SingleProduct from "./views/pages/SingleProduct";
 import { store } from "./store";
 import Cart from "./views/pages/Cart";
 import { getBasket } from "./features/basket/basketSlice";
+import { getProducts } from "./features/product/productSlice";
 
 store.dispatch(getBasket());
+store.dispatch(getProducts());
 
 
 const router = new RouterBuilder()

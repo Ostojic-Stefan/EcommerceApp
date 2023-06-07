@@ -4,9 +4,9 @@ namespace api.Extensions
 {
     public static class ProductExtensions
     {
-        private static readonly int MaxPageSize = 10;
+        private static readonly int MaxPageSize = 12;
         private static readonly int MinPageSize = 1;
-        private static readonly int DefaultPageSize = 5;
+        private static readonly int DefaultPageSize = 8;
         private static readonly int DefaultPageNumber = 1;
 
         public static IQueryable<Product> SearchProduct(this IQueryable<Product> products, string? searchTerm)
@@ -55,12 +55,12 @@ namespace api.Extensions
             };
         }
 
-        public static IQueryable<Product> FilterProducts(this IQueryable<Product> products, string? brands, string? categories)
+        public static IQueryable<Product> FilterProducts(this IQueryable<Product> products, string? brands, CategoryType? category)
         {
             if (brands is not null)
-                products.Where(x => x.Brand == brands);
-            if (categories is not null)
-                products.Where(x => x.Category.Name == categories);
+                products = products.Where(x => x.Brand == brands);
+            if (category is not null)
+                products = products.Where(x => x.CategoryId == (int)category);
             return products;
         }
     }

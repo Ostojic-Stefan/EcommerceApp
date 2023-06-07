@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using api.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace api
 {
@@ -72,7 +73,7 @@ namespace api
     public record ProductPaginationParams(
         string? SearchTerm,
         string? Brand,
-        string? Category,
+        CategoryType? Category,
         int? PageNumber,
         int? PageSize,
         string? SortTerm

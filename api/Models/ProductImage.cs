@@ -1,4 +1,5 @@
 ﻿using api.EntityFrameworkHelpers;
+using System.Text.Json.Serialization;
 
 namespace api.Models
 {
@@ -7,7 +8,6 @@ namespace api.Models
         public Product Product { get; set; }
         public int ProductId { get; set; }
         public required string ImageName { get; set; }
-        public required string Path { get; set; }
         public required string Url { get; set; }
     }
 }

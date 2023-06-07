@@ -5,7 +5,7 @@ class Cart implements IPage {
     public async render(): Promise<string> {
         let basket: BasketState = store.getState().basket;
 
-        if (basket === null)
+        if (!basket.basketItems)
             return "Loading...";
 
         const totalPrice = basket.basketItems.reduce((acc, basketItem) => {
@@ -19,7 +19,7 @@ class Cart implements IPage {
                 basket.basketItems.map(basketItem => {
                 return `
                     <div class="product">
-                        <img src="https://localhost:5001/${basketItem.imageUrl}" alt="img">
+                        <img src="${basketItem.imageUrl}" alt="img">
                         <div>Quantity: ${basketItem.quantity}</div>
                         <span>Price: ${basketItem.price}</span>
                     </div>`;

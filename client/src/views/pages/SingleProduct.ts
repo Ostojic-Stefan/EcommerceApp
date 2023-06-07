@@ -1,14 +1,14 @@
 import { ApiHandler } from "../../ApiHandler";
 
-function convertSpecificationsToHtml(object: any) {
-    return Object.entries(JSON.parse(object))
-        .reduce((acc, [key, val]) => {
-            return acc.concat( `
-                <tr>
-                    <td>${key}:</td>
-                    <td>${val}</td>
-                </tr>
-            `);
+function convertSpecificationsToHtml(object: string) {
+    return JSON.parse(object)
+        .reduce((acc: string, { name, value }: {name: string, value: string}) => {
+        return acc.concat(
+            `<tr>
+                <td>${name}</td>
+                <td>${value}</td>
+            </tr>`
+        );
     }, '');
 }
 
@@ -16,13 +16,14 @@ class SingleProduct implements IPage {
     public async render(): Promise<string> {
         const productId = Number.parseInt(location.hash.split('/')[2]);
         const product = await ApiHandler.products.getProduct(productId);
+        
 
         return `
         <div class="single-product-container">
         <div class="single-product container">
             <div class="single-product left">
                 <div class="img-container">
-                    <img src="https://localhost:5001/${product.imageUrl}"
+                    <img src="${product.imageUrl}"
                         alt="AMD-Ryzen-9-5900X">
                 </div>
             </div>

@@ -26,14 +26,20 @@ namespace DownloadSeed
             "https://search.gigatron.rs/v1/catalog/get/racunari-i-komponente/komponente/hard-diskovi?strana=2",
         };
 
+        internal record ProductImage(
+            string ImageName,
+            string Url
+        );
+
         internal record Product(
             string Name,
+            string Description,
             string Brand,
             int CategoryId,
             decimal Price,
             int InStock,
             string ImageSource,
-            string ImageUrlToSevrve,
+            ProductImage productImage,
             string Specifications,
             DateTime CreatedAt);
 
@@ -78,12 +84,16 @@ namespace DownloadSeed
                     {
                         return new Product(
                             x._source.search_result_data.name,
+                            "Placeholder Text",
                             x._source.search_result_data.brand,
                             (int)categoriesMap[x._source.search_result_data.subcategory],
                             decimal.Parse(x._source.search_result_data.price),
                             random.Next(1, 100),
                             x._source.search_result_data.image,
-                            $"https://localhost:5001/Images/{x._source.search_result_data.image.Split('/').Last()}",
+                            new ProductImage(
+                                    x._source.search_result_data.image.Split('/').Last(),
+                                    $"https://localhost:5001/Images/{x._source.search_result_data.image.Split('/').Last()}"
+                            ),
                             JsonSerializer.Serialize(x._source.search_result_data.specification_summary),
                             DateTime.Now
                         );

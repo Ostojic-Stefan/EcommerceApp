@@ -8,8 +8,18 @@ axios.defaults.withCredentials = true;
 
 const responseBody = <TResponse>(res: AxiosResponse<TResponse>) => res.data;
 
+export interface PaginationParams {
+    category?: string;
+}
+
 const products = {
-    getProducts: () => axios.get<Product[]>("Products").then(responseBody<Product[]>),
+    getProducts: (paginationParams?: PaginationParams) => {
+        let url = 'Products';
+        if (paginationParams?.category) {
+            url += `?Category=${paginationParams.category}`
+        }
+        return axios.get<Product[]>(url).then(responseBody<Product[]>);
+    },
     getProduct: (id: number) => axios.get<Product>(`Products/${id}`).then(responseBody<Product>),
 }
 

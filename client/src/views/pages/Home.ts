@@ -1,5 +1,6 @@
 import { ApiHandler } from "../../ApiHandler";
 import { addToBasket } from "../../features/basket/basketSlice";
+import { getProducts } from "../../features/product/productSlice";
 import { store } from "../../store";
 
 class Home implements IPage {
@@ -26,14 +27,14 @@ class Home implements IPage {
                 <div class="categories">
                     <h2>Categories</h2>
                     <ul>
-                        <li>Graphics Cards</li>
-                        <li>Hard Drives</li>
-                        <li>Casings</li>
-                        <li>Motherboards</li>
-                        <li>Memory</li>
-                        <li>power supplies</li>
-                        <li>Processors</li>
-                        <li>SSD</li>
+                        <li data-categoryId='1'>Graphics Cards</li>
+                        <li data-categoryId='2'>Hard Drives</li>
+                        <li data-categoryId='3'>Casings</li>
+                        <li data-categoryId='4'>Motherboards</li>
+                        <li data-categoryId='5'>Memory</li>
+                        <li data-categoryId='6'>power supplies</li>
+                        <li data-categoryId='7'>Processors</li>
+                        <li data-categoryId='8'>SSD</li>
                     </ul>
                 </div>
                 <hr>
@@ -81,13 +82,13 @@ class Home implements IPage {
     }
     public async afterRender(): Promise<void> {
         this.mainPannel = document.querySelector(".main-pannel");
-        const products = await ApiHandler.products.getProducts();
+        const products = store.getState().product.products;
         const productsString = products.map(product => {
             return `
                 <a href="/#/product/${product.id}" class="nostyle">
                     <div class="product-item" data-id=${product.id}>
                         <div class="img-and-text">
-                            <img src="${'https://localhost:5001/' + product.imageUrl}"
+                            <img src="${product.imageUrl}"
                                 alt="AMD-Ryzen-9-5900X">
                             <h3>${product.name}</h3>
                             <div class="protuct-icon-heart">
@@ -128,7 +129,12 @@ class Home implements IPage {
                 const productId = Number.parseInt((addToCart.closest('.product-item') as HTMLElement).dataset.id!);
                 store.dispatch(addToBasket({ productId: productId }));
             }
-        }); 
+        });
+
+        document.querySelector('.categories')?.addEventListener('click', (ev: any) => {
+            const categoryId = ev.target.dataset.categoryid;
+            store.dispatch(getProducts({ category: categoryId }))
+        })
     }
 }
 
