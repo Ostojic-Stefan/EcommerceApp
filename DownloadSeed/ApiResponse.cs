@@ -100,13 +100,7 @@ namespace DownloadSeed
 
     public class Hit
     {
-        public string _index { get; set; }
-        public string _type { get; set; }
-        public string _id { get; set; }
-        public double _score { get; set; }
         public Source _source { get; set; }
-        public int total { get; set; }
-        public double max_score { get; set; }
         public List<Hit> hits { get; set; }
     }
 
@@ -190,22 +184,14 @@ namespace DownloadSeed
 
     public class Hits
     {
-        public int? Total { get; set; }
-        public double? MaxScore { get; set; }
         public List<Hit> hits { get; set; }
     }
 
     public class Root
     {
-        public int took { get; set; }
-        public bool timed_out { get; set; }
-        public Shards _shards { get; set; }
         public Hits hits { get; set; }
-        public Aggregations aggregations { get; set; }
+        //public Aggregations aggregations { get; set; }
         public ActiveFilters active_filters { get; set; }
-        public int totalPages { get; set; }
-        public int currentPage { get; set; }
-        public int limit { get; set; }
     }
 
     public class Saving
@@ -251,7 +237,6 @@ namespace DownloadSeed
         public Prices prices { get; set; }
         public EnergySticker energy_sticker { get; set; }
         public object energy_file { get; set; }
-        public Stickers stickers { get; set; }
         public string img { get; set; }
         public int statistic_visits { get; set; }
         public double statistic_rating { get; set; }
@@ -290,10 +275,6 @@ namespace DownloadSeed
     public class Source
     {
         public SearchResultData search_result_data { get; set; }
-        public SearchData search_data { get; set; }
-        public List<string> suggestion_terms { get; set; }
-        public NumberSort number_sort { get; set; }
-        public List<Facet> facets { get; set; }
     }
 
     public class SpecificationSummary
