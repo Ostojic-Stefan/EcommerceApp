@@ -48,16 +48,20 @@ namespace api.Data
                 return;
             }
 
-            var processorsJSON = await File.ReadAllTextAsync("./Data/Seed/processors.json");
-            var processors = JsonSerializer.Deserialize<List<Product>>(processorsJSON);
+            var productsJSON = await File.ReadAllTextAsync("./Data/Seed/products.json");
 
-            var HDDJSON = await File.ReadAllTextAsync("./Data/Seed/hard_drives.json");
-            var HDDs = JsonSerializer.Deserialize<List<Product>>(HDDJSON);
+            var jsonDocument = JsonDocument.Parse(productsJSON);
 
-            var memoryJSON = await File.ReadAllTextAsync("./Data/Seed/memory.json");
-            var memory = JsonSerializer.Deserialize<List<Product>>(memoryJSON);
+            var tasks = new List<Task<Product>>();
 
-            dbContext.Products.AddRange(processors.Concat(HDDs).Concat(memory));
+            foreach (var jsonElement in jsonDocument.RootElement.EnumerateArray())
+            {
+                tasks.Add(Task.Run(() => JsonSerializer.Deserialize<Product>(jsonElement.GetRawText()))!);
+            }
+
+            Product[] prods = await Task.WhenAll(tasks);
+
+            dbContext.Products.AddRange(prods);
             await dbContext.SaveChangesAsync();
         }
 
