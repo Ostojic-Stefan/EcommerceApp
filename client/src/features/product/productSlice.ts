@@ -15,7 +15,6 @@ export const getProducts = createAsyncThunk<Product[], PaginationParams | undefi
     'product/getProducts', async (paginationParams, thunkAPI) => {
         try {
             const result = await ApiHandler.products.getProducts(paginationParams);
-            console.log(result);
             return result;            
         } catch (error: any) {
             thunkAPI.rejectWithValue(error.message);

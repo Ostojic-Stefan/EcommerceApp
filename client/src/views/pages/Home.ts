@@ -1,4 +1,3 @@
-import { ApiHandler } from "../../ApiHandler";
 import { addToBasket } from "../../features/basket/basketSlice";
 import { getProducts } from "../../features/product/productSlice";
 import { store } from "../../store";
@@ -89,7 +88,7 @@ class Home implements IPage {
                     <div class="product-item" data-id=${product.id}>
                         <div class="img-and-text">
                             <img src="${product.imageUrl}"
-                                alt="AMD-Ryzen-9-5900X">
+                                alt="${product.imageUrl}">
                             <h3>${product.name}</h3>
                             <div class="protuct-icon-heart">
                                 <svg width="23" height="18"

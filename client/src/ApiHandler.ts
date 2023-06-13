@@ -10,13 +10,17 @@ const responseBody = <TResponse>(res: AxiosResponse<TResponse>) => res.data;
 
 export interface PaginationParams {
     category?: string;
+    searchTerm?: string;
 }
 
 const products = {
     getProducts: (paginationParams?: PaginationParams) => {
         let url = 'Products';
         if (paginationParams?.category) {
-            url += `?Category=${paginationParams.category}`
+            url += `?Category=${paginationParams.category}`;
+        }
+        if (paginationParams?.searchTerm) {
+            url += `?Search=${paginationParams.searchTerm}`;
         }
         return axios.get<Product[]>(url).then(responseBody<Product[]>);
     },

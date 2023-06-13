@@ -8,13 +8,14 @@ import { store } from "./store";
 import Cart from "./views/pages/Cart";
 import { getBasket } from "./features/basket/basketSlice";
 import { getProducts } from "./features/product/productSlice";
+import HeaderComponent from "./views/components/HeaderComponent";
 
 store.dispatch(getBasket());
 store.dispatch(getProducts());
 
-
 const router = new RouterBuilder()
     .setHtmlId('page_container')
+    .addComponent({ component: HeaderComponent })
     .addRoute('/', Home)
     .addRoute('/product/:id', SingleProduct)
     .addRoute('/cart', Cart)
@@ -27,11 +28,8 @@ store.subscribe(() => {
     router.process();
 });
 
-
 ['load', 'hashchange'].forEach(ev => {
     window.addEventListener(ev, async () => {
         await router.process();
     })
 }); 
-
-

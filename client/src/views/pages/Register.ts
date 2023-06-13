@@ -46,7 +46,7 @@ class Register implements IPage {
             try {
                 const response = await ApiHandler.account.register(credentials);
                 console.log(response);
-                } catch (error: any) {
+            } catch (error: any) {
                 console.error(error);
             }
         });
