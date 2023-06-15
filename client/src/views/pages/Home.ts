@@ -1,9 +1,29 @@
+import { Unsubscribe } from "@reduxjs/toolkit";
 import { addToBasket } from "../../features/basket/basketSlice";
-import { getProducts } from "../../features/product/productSlice";
+import { decrementPageNumber, getProducts, incrementPageNumber } from "../../features/product/productSlice";
 import { store } from "../../store";
 
 class Home implements IPage {
     private mainPannel: HTMLElement | null = null;
+    private subscription?: Unsubscribe; 
+
+    constructor() {
+        this.init();            
+    }
+
+    public init() {
+        this.subscription = store.subscribe(() => {
+            this.render();
+        });
+    }
+
+    public destroy() {
+        if (this.subscription) {
+            this.subscription();
+        }
+        // destroy event listeners...
+    }
+
     public async render(): Promise<string> {
         const view = `
         <div class="container">
@@ -75,17 +95,22 @@ class Home implements IPage {
             </div>
             <div class="main-pannel">
             </div>
+            <div id='pagination-buttons'>
+                <button id='next'>Next</button>
+                <button id='prev'>Previous</button>
+            </div>
         </div>
             </div>`;
         return view;
     }
+
     public async afterRender(): Promise<void> {
         this.mainPannel = document.querySelector(".main-pannel");
         const products = store.getState().product.products;
         const productsString = products.map(product => {
             return `
-                <a href="/#/product/${product.id}" class="nostyle">
-                    <div class="product-item" data-id=${product.id}>
+                <div class="product-item" data-id=${product.id}>
+                    <div class='content-container'>
                         <div class="img-and-text">
                             <img src="${product.imageUrl}"
                                 alt="${product.imageUrl}">
@@ -112,8 +137,8 @@ class Home implements IPage {
                                 </svg>
                             </div>
                         </div>
-                    </div>
-                </a>`;
+                        </div>
+                </div>`;
         }).join('');
 
         this.mainPannel?.insertAdjacentHTML('afterbegin', productsString);
@@ -133,7 +158,20 @@ class Home implements IPage {
         document.querySelector('.categories')?.addEventListener('click', (ev: any) => {
             const categoryId = ev.target.dataset.categoryid;
             store.dispatch(getProducts({ category: categoryId }))
+        });
+
+        document.getElementById('pagination-buttons')?.addEventListener('click', (ev: any) => {
+            if (ev.target.id === "next") {
+                const currPageNumber = store.getState().product.pageNumber;
+                store.dispatch(getProducts({ pageNumber: currPageNumber + 1 }))
+                store.dispatch(incrementPageNumber());
+            } else if (ev.target.id === "prev") {
+                const currPageNumber = store.getState().product.pageNumber;
+                store.dispatch(getProducts({ pageNumber: currPageNumber - 1 }))
+                store.dispatch(decrementPageNumber());
+            }
         })
+
     }
 }
 

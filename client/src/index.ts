@@ -11,7 +11,10 @@ import { getProducts } from "./features/product/productSlice";
 import HeaderComponent from "./views/components/HeaderComponent";
 
 store.dispatch(getBasket());
-store.dispatch(getProducts());
+store.dispatch(getProducts({
+    pageNumber: 1,
+    pageSize: 8,
+}));
 
 const router = new RouterBuilder()
     .setHtmlId('page_container')

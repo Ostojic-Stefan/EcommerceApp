@@ -1,5 +1,11 @@
 import { Category } from "./Category";
 
+export interface PaginationData {
+    totalItems: number;
+    pageSize: number;
+    pageCount: number;
+}
+
 export interface Product {
     id: number;
     name: string;
@@ -11,4 +17,9 @@ export interface Product {
     price: number;
     category: Category;
     createdAt: Date
+}
+
+export interface ProductResponse {
+    paginationData: PaginationData;
+    products: Product[];
 }

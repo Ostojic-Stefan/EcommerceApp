@@ -4,10 +4,8 @@ import { RouterBuilder } from "./RouterBuilder";
 
 export class Router {
     private htmlContent?: HTMLDivElement;
-
     private routes = new Map<string, IPage>();
     private components = new Map<IComponent, string>();
-
     private defaultNotFound = DefaultNotFound;
 
     constructor(builder: RouterBuilder) {
@@ -32,8 +30,6 @@ export class Router {
 
     private renderComponents(page: IPage) {
         this.components.forEach((key: string, value: IComponent) => {
-            const container = document.getElementById(value.ContainerId);
-            container!.innerHTML = "";
             if (key === '*') {
                 this.renderComponent(value);
                 return;
@@ -50,8 +46,10 @@ export class Router {
             console.error(`container id ${component.ContainerId} does not exist`);
             return;
         }
-        container.innerHTML = await component.render();
-        await component.afterRender();
+        if (component.ShouldReRender) {
+            container.innerHTML = await component.render();
+            await component.afterRender();
+        }
     }
 
     private parseUrl(): string {

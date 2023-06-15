@@ -3,7 +3,8 @@ import { store } from "../../store";
 import { IComponent } from "./IComponent";
 
 class Header implements IComponent {
-    public ContainerId: string = "header-container";
+    public ShouldReRender: boolean = true;
+    public readonly ContainerId: string = "header-container";
 
     async render(): Promise<string> {
         return `<div class="header-container container">
@@ -101,7 +102,8 @@ class Header implements IComponent {
 
     async afterRender(): Promise<void> {
         const searchInput = document.getElementById('search');
-        searchInput?.addEventListener('input', ev => {
+        searchInput?.addEventListener('input', (ev) => {
+            this.ShouldReRender = false;
             ev.preventDefault();
             const inputValue = (ev.target as HTMLInputElement).value;
             console.log(inputValue);

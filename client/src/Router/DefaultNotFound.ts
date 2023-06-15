@@ -1,4 +1,10 @@
 export const DefaultNotFound: IPage = {
+    init(): void {
+
+    },
+    destroy(): void {
+        
+    },
     render: async function (): Promise<string> {
         const view = `
             <section class="section">

@@ -16,7 +16,6 @@ export const addToBasket = createAsyncThunk<Basket[], { productId: number }>(
     async ({ productId }, thunkAPI) => {
     try {
         const result = await ApiHandler.basket.addToBasket({ quantity: 1, productId: productId });
-        console.log(result);
         return result;
     } catch (error: any) {
         thunkAPI.rejectWithValue(error.message);
@@ -42,17 +41,14 @@ const basketSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(addToBasket.pending, (state, action) => {
-            console.log('loading...');
         });
         builder.addCase(addToBasket.fulfilled, (state, action) => {
             state.basketItems = action.payload;
-            console.log('fulfilled');
         });
         builder.addCase(addToBasket.rejected, (state, action) => {
             console.log('REJECTED: FAILED TO ADD ITEM TO BASKET');
         });
         builder.addCase(getBasket.pending, (state, action) => {
-            console.log('Getting Basket...');
         });
         builder.addCase(getBasket.fulfilled, (state, action) => {
             state.basketItems = action.payload;

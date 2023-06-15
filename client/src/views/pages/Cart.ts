@@ -2,6 +2,14 @@ import { BasketState } from "../../features/basket/basketSlice";
 import { store } from "../../store";
 
 class Cart implements IPage {
+    init(): void {
+
+    }
+
+    destroy(): void {
+        
+    }
+
     public async render(): Promise<string> {
         let basket: BasketState = store.getState().basket;
 

@@ -1,6 +1,14 @@
 import { ApiHandler } from "../../ApiHandler";
 
 class Login implements IPage {
+    init(): void {
+
+    }
+
+    destroy(): void {
+        
+    }
+
     public async render(): Promise<string> {
         return `
         <div class="container login-container">

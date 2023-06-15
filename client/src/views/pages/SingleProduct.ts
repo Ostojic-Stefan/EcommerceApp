@@ -13,11 +13,17 @@ function convertSpecificationsToHtml(object: string) {
 }
 
 class SingleProduct implements IPage {
+        init(): void {
+
+    }
+
+    destroy(): void {
+        
+    }
+
     public async render(): Promise<string> {
         const productId = Number.parseInt(location.hash.split('/')[2]);
         const product = await ApiHandler.products.getProduct(productId);
-        
-
         return `
         <div class="single-product-container">
         <div class="single-product container">
