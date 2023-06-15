@@ -1,4 +1,4 @@
-﻿using api.Models;
+﻿using api.QueryStringHelpers;
 using System.ComponentModel.DataAnnotations;
 
 namespace api
@@ -72,10 +72,13 @@ namespace api
 
     public record ProductPaginationParams(
         string? SearchTerm,
-        string? Brand,
-        CategoryType? Category,
-        int? PageNumber,
-        int? PageSize,
+        FilterParams? FilterParams,
+        PaginationParams? PaginationParams,
         string? SortTerm
+    );
+
+    public record PagedProductResponseDto(
+        PaginationData PaginationData,
+        IEnumerable<ProductResponseDto> Products
     );
 }

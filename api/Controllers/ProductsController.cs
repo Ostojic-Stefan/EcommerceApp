@@ -21,7 +21,7 @@ namespace api.Controllers
         public async Task<IActionResult> GetAllProducts([FromQuery] ProductPaginationParams productPaginationParams)
         {
             var products = await _productService.GetAllProductsAsync(productPaginationParams).ConfigureAwait(false);
-            var response = products.Select(Mappings.MapFromProductToProductResponseDto);
+            var response = Mappings.MapToPagedProductResponseDto(products);
             return Ok(response);
         }
 

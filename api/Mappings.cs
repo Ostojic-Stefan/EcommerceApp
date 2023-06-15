@@ -1,4 +1,5 @@
 ﻿using api.Models;
+using api.QueryStringHelpers;
 
 namespace api
 {
@@ -58,6 +59,16 @@ namespace api
                 product.CreatedAt,
                 product.UpdatedAt
             );
+        }
+
+        public static PagedProductResponseDto MapToPagedProductResponseDto(PagedResponse<Product> product)
+        {
+            return new PagedProductResponseDto
+            (
+                product.PaginationParams,
+                product.Data.Select(MapFromProductToProductResponseDto)
+            );
+
         }
     }
 }

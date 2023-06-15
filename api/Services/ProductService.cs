@@ -1,6 +1,7 @@
 ﻿using api.EntityFrameworkHelpers;
 using api.Extensions;
 using api.Models;
+using api.QueryStringHelpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
@@ -32,20 +33,21 @@ namespace api.Services
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync(ProductPaginationParams productPaginationParams)
+        public async Task<PagedResponse<Product>> GetAllProductsAsync(ProductPaginationParams productPaginationParams)
         {
             var productRepo = _unitOfWork.GetReadOnlyRepository<Product>();
 
-            return await productRepo
+            var products = productRepo
                 .Query()
                 .SearchProduct(productPaginationParams.SearchTerm)
-                .FilterProducts(productPaginationParams.Brand, productPaginationParams.Category)
-                .GetPagedProducts(productPaginationParams.PageSize, productPaginationParams.PageNumber)
-                .SortProducts(productPaginationParams.SearchTerm)
+                .FilterProducts(productPaginationParams.FilterParams)
+                .SortProducts(productPaginationParams.SortTerm)
                 .Include(x => x.Category)
-                .Include(x => x.ProductImage)
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .Include(x => x.ProductImage);
+
+            var pagedResult = await PagedResponse<Product>.GetPagedResponse(products, productPaginationParams.PaginationParams);
+
+            return pagedResult;
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)

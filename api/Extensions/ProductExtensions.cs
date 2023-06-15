@@ -1,41 +1,15 @@
 ﻿using api.Models;
+using api.QueryStringHelpers;
 
 namespace api.Extensions
 {
     public static class ProductExtensions
     {
-        private static readonly int MaxPageSize = 12;
-        private static readonly int MinPageSize = 1;
-        private static readonly int DefaultPageSize = 8;
-        private static readonly int DefaultPageNumber = 1;
-
         public static IQueryable<Product> SearchProduct(this IQueryable<Product> products, string? searchTerm)
         {
             if (searchTerm is not null)
-                return products.Where(x => x.Name.Contains(searchTerm));
+                return products.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
             return products;
-        }
-
-        public static IQueryable<Product> GetPagedProducts(this IQueryable<Product> products, int? pageSize, int? pageNumber)
-        {
-            if (pageSize is null)
-            {
-                pageSize = DefaultPageSize;
-            }
-            else
-            {
-                if (pageSize > MaxPageSize)
-                {
-                    Math.Clamp(pageSize.Value, MinPageSize, MaxPageSize);
-                }
-            }
-            if (pageNumber is null)
-            {
-                pageNumber = DefaultPageNumber;
-            }
-            return products
-                .Skip((pageNumber.Value - 1) * pageSize.Value)
-                .Take(pageSize.Value);
         }
 
         public static IQueryable<Product> SortProducts(this IQueryable<Product> products, string? sortTerm)
@@ -55,12 +29,15 @@ namespace api.Extensions
             };
         }
 
-        public static IQueryable<Product> FilterProducts(this IQueryable<Product> products, string? brands, CategoryType? category)
+        public static IQueryable<Product> FilterProducts(this IQueryable<Product> products, FilterParams? filterParams)
         {
-            if (brands is not null)
-                products = products.Where(x => x.Brand == brands);
-            if (category is not null)
-                products = products.Where(x => x.CategoryId == (int)category);
+            if (filterParams is null)
+                return products;
+
+            if (filterParams.Brands is not null)
+                products = products.Where(x => x.Brand == filterParams.Brands);
+            if (filterParams?.Category is not null)
+                products = products.Where(x => x.CategoryId == (int)filterParams.Category);
             return products;
         }
     }
